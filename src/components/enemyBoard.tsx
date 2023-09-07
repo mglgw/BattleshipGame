@@ -7,11 +7,7 @@ const EnemyBoard = () => {
     return (
         <div>
             <div className={"w-[480px]"} id={"enemyBoard"}>
-                <div
-                    className={
-                        "border-solid border-orange-700 grid grid-rows-[10] grid-cols-10 gap-0"
-                    }
-                >
+                <div className={" grid grid-rows-[10] grid-cols-10 gap-0"}>
                     {grid.board2.cells?.map((y) => {
                         return (
                             <div className={""} key={y[0].x}>
@@ -24,7 +20,13 @@ const EnemyBoard = () => {
                                             rowX={cell.x}
                                             rowY={cell.y}
                                             state={cell.state}
-                                            isPreview={false}
+                                            isPreview={
+                                                cell.y === grid.board2.hoverY &&
+                                                grid.board2.previewXCoords.indexOf(
+                                                    cell.x,
+                                                ) >= 0 &&
+                                                grid.board2.isYourTurn
+                                            }
                                         />
                                     </div>
                                 ))}
@@ -33,7 +35,11 @@ const EnemyBoard = () => {
                     })}
                 </div>
                 <div>
-                    <div className={"bg-blue-500"}>Your Opponent Board</div>
+                    {grid.board1.isHost || grid.board1.joinedToGame ? (
+                        <div className={"bg-blue-500"}>Your Opponent Board</div>
+                    ) : (
+                        ""
+                    )}
                 </div>
             </div>
         </div>

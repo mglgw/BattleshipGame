@@ -1,6 +1,6 @@
 import { FC } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { changeHovered } from "../store/boardSlice.ts";
+import { changeHoveredOnRivalBoard } from "../store/boardSlice.ts";
 import { CellState } from "../types.ts";
 import { HitBoard } from "../connection.ts";
 import { RootState } from "../store";
@@ -30,7 +30,7 @@ const RivalCell: FC<CellProps> = ({ rowX, rowY, state, isPreview }) => {
     };
     const handleMouseEnter = () => {
         dispatch(
-            changeHovered({
+            changeHoveredOnRivalBoard({
                 x: rowX,
                 y: rowY,
             }),
@@ -40,13 +40,11 @@ const RivalCell: FC<CellProps> = ({ rowX, rowY, state, isPreview }) => {
         <div
             onClick={Shoot}
             onMouseEnter={handleMouseEnter}
-            className={`border-solid border-orange-700 border-2 bg-blue-500 h-12 w-12 c 
+            className={`border-solid border-gray-400 border-2 bg-blue-500 h-12 w-12 c 
             ${state === CellState.MISSED ? "bg-red-950" : " "}
             ${state === CellState.HIT ? "bg-green-950" : " "}
             ${isPreview ? "bg-red-800 " : " "}`}
-        >
-            id= {rowX},{rowY}
-        </div>
+        ></div>
     );
 };
 export default RivalCell;

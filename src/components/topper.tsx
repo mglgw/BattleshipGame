@@ -1,33 +1,27 @@
-import {
-    CreateBoard,
-    GetRivalBoard,
-    JoinGame,
-    StartDuel,
-} from "../connection.ts";
+import { CreateBoard, GetRivalBoard, JoinGame } from "../connection.ts";
 import { useState } from "react";
-import { setIfHost } from "../store/boardSlice.ts";
-import { useDispatch } from "react-redux";
+import { setIfHost, setIfJoined } from "../store/boardSlice.ts";
+import { useDispatch, useSelector } from "react-redux";
 import ScoreCounter from "./scoreCounter.tsx";
+import { RootState } from "../store";
 
 const Topper = () => {
     const [isNewGame, setIsNewGame] = useState(true);
-    const [gameStarted, setGameStarted] = useState(false);
+    const grid = useSelector((state: RootState) => state.board);
     const dispatch = useDispatch();
     const joinGame = async () => {
         await JoinGame();
         await GetRivalBoard();
-        setIsNewGame(false);
+        if (!grid.board1.isHost) {
+            setIsNewGame(false);
+            dispatch(setIfJoined(true));
+        }
     };
     const generateBoard = async () => {
         await CreateBoard();
         dispatch(setIfHost(true));
         await GetRivalBoard();
         setIsNewGame(false);
-    };
-    const startGame = async () => {
-        await StartDuel();
-        await GetRivalBoard();
-        setGameStarted(true);
     };
     return (
         <div>
@@ -41,13 +35,14 @@ const Topper = () => {
                     </div>
                 ) : (
                     <div>
-                        {gameStarted ? (
+                        {grid.board1.isReady && grid.board2.isReady ? (
                             <ScoreCounter />
                         ) : (
                             <div>
-                                Place your ships on board and press Start when
-                                you are ready!
-                                <button onClick={startGame}>Start!</button>
+                                Place your ships on board! Your opponent is{" "}
+                                {grid.board2.isReady
+                                    ? "ready!"
+                                    : "not yet ready!"}
                             </div>
                         )}
                     </div>

@@ -15,22 +15,31 @@ const BottomCell: FC<BottomCellProps> = ({ gameId }) => {
         dispatch(setInputGameId(Number(inputRef.current?.value)));
         event.preventDefault();
     };
-
     return (
         <div>
             {grid.board1.isHost ? (
                 <div className={"bg-blue-500"}>Your Game ID {gameId}</div>
             ) : (
-                <div className={`bg-blue-500 $`}>
-                    Type in game ID
-                    <form>
-                        <input
-                            type="number"
-                            id="gameId"
-                            onChange={handleChange}
-                            ref={inputRef}
-                        />
-                    </form>
+                <div>
+                    {grid.board1.joinedToGame ? (
+                        <div className={"bg-blue-500"}>
+                            Your Game ID {grid.board1.rivalBoardId}
+                        </div>
+                    ) : (
+                        <div
+                            className={`flex flex-row justify-center bg-blue-500 $`}
+                        >
+                            Type in game ID
+                            <form>
+                                <input
+                                    type="number"
+                                    id="gameId"
+                                    onChange={handleChange}
+                                    ref={inputRef}
+                                />
+                            </form>
+                        </div>
+                    )}
                 </div>
             )}
         </div>

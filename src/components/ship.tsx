@@ -1,37 +1,43 @@
-import { FC, useState } from "react";
-import { useDispatch } from "react-redux";
-import { selectShipLength } from "../store/boardSlice.ts";
+import { FC } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { selectShipId, selectShipLength } from "../store/boardSlice.ts";
+import { RootState } from "../store";
 
 export interface ShipProps {
-    length: number;
-    coordX: number[];
-    coordY: number[];
     boardId: number;
-    totalCoords: number[];
+    length: number;
+    id: number;
+    isSet: boolean;
 }
 
-const Ship: FC<{ length: number }> = (props) => {
-    const [shipDisabled, setShipDisabled] = useState(false);
+const Ship: FC<{ length: number; id: number }> = (props) => {
+    const grid = useSelector((state: RootState) => state.board);
     const dispatch = useDispatch();
+    const currentShipById = grid.board1.ships.find(
+        (ship) => ship.id === props.id,
+    );
     const handleClick = () => {
         dispatch(selectShipLength(props.length));
-        setShipDisabled(true);
+        dispatch(selectShipId(props.id));
+        console.log(currentShipById?.isSet);
+        console.log(props.id);
     };
     return (
         <div>
             <div
-                className={` h-12 p-2 flex ${
-                    shipDisabled ? "" : "cursor-pointer "
+                className={` h-12 flex ${
+                    currentShipById?.isSet ? "" : "cursor-pointer "
                 }`}
-                onClick={shipDisabled ? undefined : handleClick}
+                onClick={currentShipById?.isSet ? undefined : handleClick}
             >
                 {Array(props.length)
                     .fill(null, 0, props.length)
                     .map((value, index) => {
                         return (
                             <div
+                                id={value}
                                 className={`h-12 w-12 border-solid border-2 border-orange-700 ${
-                                    shipDisabled ? "" : "bg-amber-200"
+                                    currentShipById?.isSet ? "" : "bg-amber-200"
                                 }`}
                                 key={index}
                             ></div>

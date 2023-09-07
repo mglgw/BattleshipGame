@@ -38,15 +38,13 @@ const Cell: FC<CellProps> = ({ rowX, rowY, state, isPreview }) => {
         <div
             onClick={handleClick}
             onMouseEnter={handleMouseEnter}
-            className={`border-solid border-orange-700 border-2 bg-blue-500 h-12 w-12 c 
-            ${state === CellState.TAKEN ? "text-black" : " "} 
-            ${state === CellState.SHIP ? "bg-amber-300" : " "} 
+            className={`border-solid border-gray-400 border-2 bg-blue-500 h-12 w-12 c 
+            ${state === CellState.TAKEN ? "bg-blue-700" : " "} 
+            ${state === CellState.SHIP ? "bg-gray-700" : " "} 
             ${state === CellState.MISSED ? "bg-red-950" : " "}
             ${state === CellState.HIT ? "bg-green-950" : " "}
-            ${isPreview ? "bg-red-800 " : " "}`}
-        >
-            id= {rowX},{rowY}
-        </div>
+            ${isPreview ? "bg-white " : " "}`}
+        ></div>
     );
 };
 export default Cell;
