@@ -1,9 +1,9 @@
 import { FC } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { changeHovered } from "../store/boardSlice.ts";
 import { CellState } from "../types.ts";
 import { RootState } from "../store";
-import { GetBoard, GetRivalBoard, SetBoard } from "../connection.ts";
+import { SetShipOnBoard } from "../connection.ts";
+import { changeHoveredCell } from "../store/gameSlice.ts";
 
 export interface CellProps {
     rowX: number;
@@ -14,21 +14,19 @@ export interface CellProps {
 
 const Cell: FC<CellProps> = ({ rowX, rowY, state, isPreview }) => {
     const dispatch = useDispatch();
-    const grid = useSelector((state: RootState) => state.board);
+    const game = useSelector((state: RootState) => state.game);
     const handleClick = async () => {
         if (
             state === CellState.EMPTY &&
-            grid.board1.shipLength > 0 &&
-            grid.board1.numberOfPlacedShips < 10
+            game.shipLength > 0 &&
+            game.numberOfPlacedShips < 10
         ) {
-            await SetBoard();
-            await GetBoard();
-            await GetRivalBoard();
+            await SetShipOnBoard();
         }
     };
     const handleMouseEnter = () => {
         dispatch(
-            changeHovered({
+            changeHoveredCell({
                 x: rowX,
                 y: rowY,
             }),

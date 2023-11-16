@@ -1,7 +1,7 @@
 import { FC } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { selectShipId, selectShipLength } from "../store/boardSlice.ts";
 import { RootState } from "../store";
+import { selectShipId, selectShipLength } from "../store/gameSlice.ts";
 
 export interface ShipProps {
     boardId: number;
@@ -11,9 +11,9 @@ export interface ShipProps {
 }
 
 const Ship: FC<{ length: number; id: number }> = (props) => {
-    const grid = useSelector((state: RootState) => state.board);
+    const game = useSelector((state: RootState) => state.game);
     const dispatch = useDispatch();
-    const currentShipById = grid.board1.ships.find(
+    const currentShipById = game.playerBoard.ships.find(
         (ship) => ship.id === props.id,
     );
     const handleClick = () => {

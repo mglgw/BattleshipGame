@@ -1,7 +1,7 @@
 import { FC, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../store";
-import { setInputGameId } from "../store/boardSlice.ts";
+import { setGameId } from "../store/gameSlice.ts";
 
 interface BottomCellProps {
     gameId: number;
@@ -9,35 +9,32 @@ interface BottomCellProps {
 
 const BottomCell: FC<BottomCellProps> = ({ gameId }) => {
     const inputRef = useRef<HTMLInputElement>(null);
-    const grid = useSelector((state: RootState) => state.board);
+    const game = useSelector((state: RootState) => state.game);
     const dispatch = useDispatch();
-    const handleChange = (event) => {
-        dispatch(setInputGameId(Number(inputRef.current?.value)));
-        event.preventDefault();
+    const handleChange = () => {
+        dispatch(setGameId(Number(inputRef.current?.value)));
     };
     return (
         <div>
-            {grid.board1.isHost ? (
+            {game.isInGame ? (
                 <div className={"bg-blue-500"}>Your Game ID {gameId}</div>
             ) : (
                 <div>
-                    {grid.board1.joinedToGame ? (
+                    {game.isInGame ? (
                         <div className={"bg-blue-500"}>
-                            Your Game ID {grid.board1.rivalBoardId}
+                            Your Game ID {gameId}
                         </div>
                     ) : (
                         <div
                             className={`flex flex-row justify-center bg-blue-500 $`}
                         >
                             Type in game ID
-                            <form>
                                 <input
                                     type="number"
                                     id="gameId"
                                     onChange={handleChange}
                                     ref={inputRef}
                                 />
-                            </form>
                         </div>
                     )}
                 </div>

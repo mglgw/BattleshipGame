@@ -7,8 +7,17 @@ export interface ICell {
     battleship: ShipProps;
 }
 
+export interface IPlayer {
+    Board: BoardProps;
+    ConnectionId: string;
+    Id: string;
+    IsHost: boolean;
+}
+
 export interface IShip {
     boardId: number;
+    x: number;
+    y: number;
     length: number;
     id: number;
     isSet: boolean;
@@ -20,4 +29,11 @@ export enum CellState {
     SHIP,
     HIT,
     MISSED,
+}
+
+export interface BoardProps {
+    boardId: number;
+    ships: IShip[];
+    cells: ICell[][];
+    score:number;
 }

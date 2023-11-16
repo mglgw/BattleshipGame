@@ -7,13 +7,13 @@ import Topper from "./topper.tsx";
 import GameOver from "./gameOver.tsx";
 
 const Board = () => {
-    const grid = useSelector((state: RootState) => state.board);
+    const game = useSelector((state: RootState) => state.game);
     return (
         <div>
             <div className={"flex flex-row w-[480px] justify-evenly"}>
-                {grid.board1.isGameOver ? <GameOver /> : <Topper />}
+                {game.gameOver ? <GameOver /> : <Topper />}
             </div>
-            {grid.board1.isGameOver ? (
+            {game.gameOver ? (
                 ""
             ) : (
                 <div
@@ -25,7 +25,7 @@ const Board = () => {
                                 " border-gray-400 grid grid-rows-[10] grid-cols-10 gap-0 static"
                             }
                         >
-                            {grid.board1.cells?.map((y) => {
+                            {game.playerBoard.cells?.map((y) => {
                                 return (
                                     <div className={""} key={y[0].x}>
                                         {y.map((cell) => (
@@ -39,9 +39,8 @@ const Board = () => {
                                                     state={cell.state}
                                                     isPreview={
                                                         cell.y ===
-                                                            grid.board1
-                                                                .hoverY &&
-                                                        grid.board1.previewXCoords.indexOf(
+                                                            game.hoverY &&
+                                                        game.previewXCoords.indexOf(
                                                             cell.x,
                                                         ) >= 0
                                                     }
@@ -52,7 +51,7 @@ const Board = () => {
                                 );
                             })}
                         </div>
-                        <BottomCell gameId={grid.board1.boardId} />
+                        <BottomCell gameId={game.invCode} />
                     </div>
                     <div className={``}>
                         <EnemyBoard />

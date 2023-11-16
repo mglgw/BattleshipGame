@@ -1,32 +1,27 @@
-import { CreateBoard, GetRivalBoard, JoinGame } from "../connection.ts";
-import { useState } from "react";
-import { setIfHost, setIfJoined } from "../store/boardSlice.ts";
+import { CreateGame, JoinToGame } from "../connection.ts";
 import { useDispatch, useSelector } from "react-redux";
 import ScoreCounter from "./scoreCounter.tsx";
-import { RootState } from "../store";
+import { RootState, store } from "../store";
+import { setIsInGame } from "../store/gameSlice.ts";
 
 const Topper = () => {
-    const [isNewGame, setIsNewGame] = useState(true);
-    const grid = useSelector((state: RootState) => state.board);
+    const game = useSelector((state: RootState) => state.game);
     const dispatch = useDispatch();
+    const currentState = store.getState();
     const joinGame = async () => {
-        await JoinGame();
-        await GetRivalBoard();
-        if (!grid.board1.isHost) {
-            setIsNewGame(false);
-            dispatch(setIfJoined(true));
-        }
+        await JoinToGame();
+        dispatch(setIsInGame(true));
+        console.log(currentState.game);
     };
     const generateBoard = async () => {
-        await CreateBoard();
-        dispatch(setIfHost(true));
-        await GetRivalBoard();
-        setIsNewGame(false);
+        await CreateGame();
+        dispatch(setIsInGame(true));
+        console.log(currentState.game);
     };
     return (
         <div>
             <div>
-                {isNewGame ? (
+                {!game.isInGame ? (
                     <div>
                         <button onClick={generateBoard}>
                             Start Game - Host
@@ -35,15 +30,10 @@ const Topper = () => {
                     </div>
                 ) : (
                     <div>
-                        {grid.board1.isReady && grid.board2.isReady ? (
+                        {game.ready ? (
                             <ScoreCounter />
                         ) : (
-                            <div>
-                                Place your ships on board! Your opponent is{" "}
-                                {grid.board2.isReady
-                                    ? "ready!"
-                                    : "not yet ready!"}
-                            </div>
+                            <div>Place your ships on board!</div>
                         )}
                     </div>
                 )}

@@ -4,13 +4,12 @@ import { RootState } from "../store";
 import ShipFooter from "./shipFooter.tsx";
 
 const ShipManager = () => {
-    const grid = useSelector((state: RootState) => state.board);
-    console.log(grid.board1.joinedToGame);
+    const game = useSelector((state: RootState) => state.game);
     return (
         <div>
-            {grid.board1.isHost || grid.board1.joinedToGame ? (
+            {game.isInGame ? (
                 <div>
-                    {grid.board1.isReady ? (
+                    {game.gameOver ? (
                         ""
                     ) : (
                         <div className={""}>

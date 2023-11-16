@@ -2,17 +2,17 @@ import { useSelector } from "react-redux";
 import { RootState } from "../store";
 
 const ScoreCounter = () => {
-    const grid = useSelector((state: RootState) => state.board);
+    const game = useSelector((state: RootState) => state.game);
     return (
         <div>
             <div>
-                {grid.board1.isYourTurn ? (
-                    <div>Enemy Turn!</div>
-                ) : (
+                {game.currentTurnPlayerId === game.playerId ? (
                     <div>Your Turn!</div>
+                ) : (
+                    <div>Enemy Turn!</div>
                 )}
             </div>
-            Your score: {grid.board1.score}/20
+            Your score: {game.playerBoard.score}/20
         </div>
     );
 };
